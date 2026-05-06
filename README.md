@@ -59,7 +59,7 @@ Wichtige Felder:
 - RedMExePath: Optionaler fixer Pfad zu RedM.exe
 - EnableLauncherAutoUpdate: Aktiviert die GitHub-Updateprüfung
 - GitHubOwner: Owner des GitHub-Repositories
-- GitHubRepo: Name des GitHub-Repositories
+- GitHubRepo: Name des GitHub-Repositories, owner/repo oder eine vollständige GitHub-URL
 - GitHubAssetName: Erwarteter Dateiname des Release-Assets, standardmässig BloodyMaryLauncher.exe
 
 Wenn GitHubOwner oder GitHubRepo leer sind, bleibt das Launcher-Auto-Update deaktiviert.

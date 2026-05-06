@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json;
@@ -10,6 +11,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using BloodyMaryLauncher.Models;
 
 namespace BloodyMaryLauncher.Services;
 
@@ -23,22 +25,36 @@ public static class AppUpdateService
         var config = LauncherConfigService.Load();
         var currentVersion = GetCurrentVersion();
 
-        if (!config.EnableLauncherAutoUpdate
-            || string.IsNullOrWhiteSpace(config.GitHubOwner)
-            || string.IsNullOrWhiteSpace(config.GitHubRepo))
+        if (!config.EnableLauncherAutoUpdate)
         {
             return UpdateCheckResult.Disabled(currentVersion);
         }
 
+        if (!HasGitHubConfiguration(config))
+        {
+            return UpdateCheckResult.Disabled(currentVersion);
+        }
+
+        if (!TryResolveRepository(config, out var githubOwner, out var githubRepo))
+        {
+            return UpdateCheckResult.Failed(
+                currentVersion,
+                "GitHub-Konfiguration ist ungültig. Verwende GitHubOwner + GitHubRepo, owner/repo oder eine GitHub-URL.");
+        }
+
         using var response = await HttpClient.GetAsync(
-            $"repos/{config.GitHubOwner}/{config.GitHubRepo}/releases/latest",
+            $"repos/{githubOwner}/{githubRepo}/releases/latest",
             cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
+            var message = response.StatusCode == HttpStatusCode.NotFound
+                ? $"GitHub-Release nicht gefunden. Prüfe {githubOwner}/{githubRepo} und ob unter Releases eine aktuelle Version veröffentlicht ist."
+                : $"GitHub-Updateprüfung fehlgeschlagen ({(int)response.StatusCode}).";
+
             return UpdateCheckResult.Failed(
                 currentVersion,
-                $"GitHub-Updateprüfung fehlgeschlagen ({(int)response.StatusCode}).");
+                message);
         }
 
         await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -178,6 +194,57 @@ exit /b 0
         return client;
     }
 
+    private static bool HasGitHubConfiguration(LauncherConfig config)
+    {
+        return !string.IsNullOrWhiteSpace(config.GitHubOwner)
+               || !string.IsNullOrWhiteSpace(config.GitHubRepo);
+    }
+
+    private static bool TryResolveRepository(LauncherConfig config, out string owner, out string repo)
+    {
+        owner = string.Empty;
+        repo = string.Empty;
+
+        var configuredOwner = config.GitHubOwner?.Trim();
+        var configuredRepo = config.GitHubRepo?.Trim();
+
+        if (!string.IsNullOrWhiteSpace(configuredRepo)
+            && Uri.TryCreate(configuredRepo, UriKind.Absolute, out var repositoryUri)
+            && repositoryUri.Host.EndsWith("github.com", StringComparison.OrdinalIgnoreCase))
+        {
+            var segments = repositoryUri.AbsolutePath
+                .Trim('/')
+                .Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            if (segments.Length >= 2)
+            {
+                owner = segments[0];
+                repo = NormalizeRepositoryName(segments[1]);
+                return !string.IsNullOrWhiteSpace(owner) && !string.IsNullOrWhiteSpace(repo);
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(configuredRepo) && configuredRepo.Contains('/', StringComparison.Ordinal))
+        {
+            var segments = configuredRepo.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (segments.Length == 2)
+            {
+                owner = segments[0];
+                repo = NormalizeRepositoryName(segments[1]);
+                return !string.IsNullOrWhiteSpace(owner) && !string.IsNullOrWhiteSpace(repo);
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(configuredOwner) || string.IsNullOrWhiteSpace(configuredRepo))
+        {
+            return false;
+        }
+
+        owner = configuredOwner;
+        repo = NormalizeRepositoryName(configuredRepo);
+        return !string.IsNullOrWhiteSpace(repo);
+    }
+
     private static GitHubAsset? SelectAsset(GitHubRelease release, string? configuredAssetName)
     {
         if (!string.IsNullOrWhiteSpace(configuredAssetName))
@@ -246,6 +313,15 @@ exit /b 0
 
         var match = VersionRegex.Match(versionText);
         return match.Success ? match.Value : "0.0.0";
+    }
+
+    private static string NormalizeRepositoryName(string repositoryName)
+    {
+        var normalizedRepositoryName = repositoryName.Trim().Trim('/');
+
+        return normalizedRepositoryName.EndsWith(".git", StringComparison.OrdinalIgnoreCase)
+            ? normalizedRepositoryName[..^4]
+            : normalizedRepositoryName;
     }
 
     public sealed record UpdateCheckResult(
