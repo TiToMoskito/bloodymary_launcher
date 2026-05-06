@@ -1,0 +1,266 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BloodyMaryLauncher.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="540" d:DesignHeight="680"
+        x:Class="BloodyMaryLauncher.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/icon.ico"
+        Title="BloodyMary Launcher"
+        Width="540" Height="680"
+        MinWidth="480" MinHeight="600"
+        WindowStartupLocation="CenterScreen"
+        Background="#0D0B0A">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <!-- Outer frame border with subtle warm edge -->
+    <Border BorderBrush="#2A1F17" BorderThickness="1" Margin="6">
+        <Border BorderBrush="#3D2E22" BorderThickness="1" Padding="0">
+            <DockPanel>
+
+                <!-- Status Bar at bottom -->
+                <Border DockPanel.Dock="Bottom"
+                        Background="#110E0C"
+                        BorderBrush="#2A1F17" BorderThickness="0,1,0,0"
+                        Padding="16,8">
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Foreground="#8B7D6B"
+                               FontSize="11.5"
+                               FontStyle="Italic"
+                               TextWrapping="Wrap"/>
+                </Border>
+
+                <!-- Main content -->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="32,24,32,20" Spacing="0">
+
+                        <!-- ═══ HEADER ═══ -->
+                        <StackPanel HorizontalAlignment="Center" Spacing="2" Margin="0,4,0,0">
+                            <!-- Decorative top rule -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,0,0,6">
+                                <Border Width="60" Height="1" Background="#3D2E22"/>
+                                <TextBlock Text="✦" Foreground="#6B1A1A" FontSize="10"/>
+                                <Border Width="60" Height="1" Background="#3D2E22"/>
+                            </StackPanel>
+
+                            <TextBlock Text="BLOODY MARY"
+                                       FontSize="34" FontWeight="Bold"
+                                       Foreground="#8B1A1A"
+                                       LetterSpacing="6"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="— RedM Launcher —"
+                                       FontSize="12"
+                                       Foreground="#6B5D4F"
+                                       LetterSpacing="3"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,2,0,0"/>
+
+                            <!-- Decorative bottom rule -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,8,0,0">
+                                <Border Width="80" Height="1" Background="#3D2E22"/>
+                                <TextBlock Text="⬥" Foreground="#C4A55A" FontSize="8"/>
+                                <Border Width="80" Height="1" Background="#3D2E22"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- ═══ REDM PATH ═══ -->
+                        <Border Background="#14100E"
+                                BorderBrush="#2A1F17" BorderThickness="1"
+                                CornerRadius="2" Padding="14,12"
+                                Margin="0,20,0,0">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="REDM PFAD"
+                                           FontWeight="SemiBold"
+                                           Foreground="#C4A55A"
+                                           FontSize="11"
+                                           LetterSpacing="2"/>
+                                <DockPanel>
+                                    <Button Content="Durchsuchen"
+                                            DockPanel.Dock="Right"
+                                            Command="{Binding BrowseRedMPathCommand}"
+                                            Margin="10,0,0,0"
+                                            Padding="14,6"
+                                            Background="#1E1714"
+                                            Foreground="#C4A55A"
+                                            BorderBrush="#3D2E22"
+                                            BorderThickness="1"
+                                            CornerRadius="2"
+                                            FontSize="11"/>
+                                    <TextBlock Text="{Binding RedMPath}"
+                                               VerticalAlignment="Center"
+                                               Foreground="#7A6E60"
+                                               FontSize="11.5"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </DockPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ═══ CONNECT BUTTON ═══ -->
+                        <Button Command="{Binding ConnectCommand}"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Padding="0,18"
+                                CornerRadius="2"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Background="#8B1A1A"
+                                Foreground="#E8D5B5"
+                                BorderBrush="#A02020"
+                                BorderThickness="1"
+                                Margin="0,16,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="⬧" VerticalAlignment="Center" FontSize="12" Foreground="#C4A55A"/>
+                                <TextBlock Text="VERBINDEN" VerticalAlignment="Center" LetterSpacing="4"/>
+                                <TextBlock Text="⬧" VerticalAlignment="Center" FontSize="12" Foreground="#C4A55A"/>
+                            </StackPanel>
+                        </Button>
+
+                        <!-- Divider -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,20,0,0">
+                            <Border Width="40" Height="1" Background="#2A1F17"/>
+                            <TextBlock Text="◆" Foreground="#3D2E22" FontSize="6"/>
+                            <Border Width="40" Height="1" Background="#2A1F17"/>
+                        </StackPanel>
+
+                        <!-- ═══ UPDATE CHANNEL ═══ -->
+                        <Border Background="#14100E"
+                                BorderBrush="#2A1F17" BorderThickness="1"
+                                CornerRadius="2" Padding="14,12"
+                                Margin="0,16,0,0">
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="AKTUALISIERUNGSKANAL"
+                                           FontWeight="SemiBold"
+                                           Foreground="#C4A55A"
+                                           FontSize="11"
+                                           LetterSpacing="2"/>
+                                <Grid ColumnDefinitions="*,*,*,*" HorizontalAlignment="Stretch">
+                                    <Button Grid.Column="0"
+                                            Content="RELEASE"
+                                            Command="{Binding SetChannelReleaseCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="0,10"
+                                            Margin="0,0,3,0"
+                                            CornerRadius="2"
+                                            FontWeight="SemiBold"
+                                            FontSize="12"
+                                            Foreground="#E8D5B5"
+                                            BorderBrush="#3D2E22"
+                                            BorderThickness="1">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="{Binding IsReleaseActive, Converter={x:Static vm:BoolToColorConverter.Instance}}"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Grid.Column="1"
+                                            Content="BETA"
+                                            Command="{Binding SetChannelBetaCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="0,10"
+                                            Margin="3,0,3,0"
+                                            CornerRadius="2"
+                                            FontWeight="SemiBold"
+                                            FontSize="12"
+                                            Foreground="#E8D5B5"
+                                            BorderBrush="#3D2E22"
+                                            BorderThickness="1">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="{Binding IsBetaActive, Converter={x:Static vm:BoolToColorConverter.Instance}}"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Grid.Column="2"
+                                            Content="UNTESTED"
+                                            Command="{Binding SetChannelUntestedCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="0,10"
+                                            Margin="3,0,0,0"
+                                            CornerRadius="2"
+                                            FontWeight="SemiBold"
+                                            FontSize="12"
+                                            Foreground="#E8D5B5"
+                                            BorderBrush="#3D2E22"
+                                            BorderThickness="1">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="{Binding IsUntestedActive, Converter={x:Static vm:BoolToColorConverter.Instance}}"/>
+                                        </Button.Background>
+                                    </Button>
+                                    <Button Grid.Column="3"
+                                            Content="GRAFIK"
+                                            Command="{Binding SetChannelGrafikCommand}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="0,10"
+                                            Margin="3,0,0,0"
+                                            CornerRadius="2"
+                                            FontWeight="SemiBold"
+                                            FontSize="11"
+                                            Foreground="#E8D5B5"
+                                            BorderBrush="#3D2E22"
+                                            BorderThickness="1">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="{Binding IsGrafikActive, Converter={x:Static vm:BoolToColorConverter.Instance}}"/>
+                                        </Button.Background>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ═══ ACTION BUTTONS ═══ -->
+                        <Grid ColumnDefinitions="*,*" HorizontalAlignment="Stretch" Margin="0,14,0,0">
+                            <Button Grid.Column="0"
+                                    Command="{Binding ClearCacheCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Padding="0,14"
+                                    Margin="0,0,5,0"
+                                    CornerRadius="2"
+                                    FontWeight="SemiBold"
+                                    FontSize="12"
+                                    Background="#1E1714"
+                                    Foreground="#D4C5A9"
+                                    BorderBrush="#3D2E22"
+                                    BorderThickness="1">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="✕" Foreground="#8B1A1A" VerticalAlignment="Center" FontSize="13"/>
+                                    <TextBlock Text="Cache leeren" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Command="{Binding ResetGraphicsCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Center"
+                                    Padding="0,14"
+                                    Margin="5,0,0,0"
+                                    CornerRadius="2"
+                                    FontWeight="SemiBold"
+                                    FontSize="12"
+                                    Background="#1E1714"
+                                    Foreground="#D4C5A9"
+                                    BorderBrush="#3D2E22"
+                                    BorderThickness="1">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <TextBlock Text="⟲" Foreground="#8B1A1A" VerticalAlignment="Center" FontSize="15"/>
+                                    <TextBlock Text="Grafik Reset" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <!-- Bottom ornament -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8" Margin="0,22,0,4">
+                            <Border Width="50" Height="1" Background="#2A1F17"/>
+                            <TextBlock Text="✦" Foreground="#6B1A1A" FontSize="10"/>
+                            <Border Width="50" Height="1" Background="#2A1F17"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>
