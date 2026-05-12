@@ -152,7 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Process.Start(new ProcessStartInfo
             {
                 FileName = RedMPath,
-                Arguments = "-pure_1 +connect server.bloodymary.io",
+                Arguments = "-pure_1 +connect titomoskito-53j54z.users.cfx.re",
                 UseShellExecute = true
             });
             StatusMessage = "RedM wird gestartet...";
