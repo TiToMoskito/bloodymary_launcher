@@ -152,7 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
             Process.Start(new ProcessStartInfo
             {
                 FileName = RedMPath,
-                Arguments = "-pure_1 +connect titomoskito-53j54z.users.cfx.re",
+                Arguments = "-pure_1 +connect 103.77.224.9",
                 UseShellExecute = true
             });
             StatusMessage = "RedM wird gestartet...";
