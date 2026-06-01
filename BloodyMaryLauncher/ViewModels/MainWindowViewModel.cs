@@ -139,7 +139,7 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void Connect()
+    private async Task Connect()
     {
         if (!IsRedMFound || string.IsNullOrEmpty(RedMPath))
         {
@@ -149,10 +149,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
+            StatusMessage = "Server-IP wird geladen...";
+            var directConnectAddress = await DirectConnectService.GetDirectConnectAddressAsync();
+
             Process.Start(new ProcessStartInfo
             {
                 FileName = RedMPath,
-                Arguments = "-pure_1 +connect 103.77.224.9",
+                Arguments = $"-pure_1 +connect {directConnectAddress}",
                 UseShellExecute = true
             });
             StatusMessage = "RedM wird gestartet...";

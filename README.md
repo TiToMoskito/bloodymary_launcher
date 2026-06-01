@@ -5,7 +5,7 @@ BloodyMary Launcher ist ein Windows-Launcher für RedM auf Basis von Avalonia. D
 ## Funktionen
 
 - RedM.exe automatisch finden oder manüll auswählen
-- Verbindung zu server.bloodymary.io starten
+- Verbindung starten, wobei die Direct-Connect-IP dynamisch von https://bloodymary.io/ip.txt geladen wird
 - Update-Kanäle production, beta, unstable und Grafik-Branch umschalten
 - Cache und Grafikdaten zurücksetzen
 - Optionales Launcher-Auto-Update über GitHub Releases
