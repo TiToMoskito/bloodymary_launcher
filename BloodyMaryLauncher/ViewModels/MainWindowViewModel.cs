@@ -149,13 +149,13 @@ public partial class MainWindowViewModel : ViewModelBase
 
         try
         {
-            StatusMessage = "Server-IP wird geladen...";
-            var directConnectAddress = await DirectConnectService.GetDirectConnectAddressAsync();
+            StatusMessage = "Direct-Connect-Ziel wird geladen...";
+            var directConnectTarget = await DirectConnectService.GetDirectConnectTargetAsync();
 
             Process.Start(new ProcessStartInfo
             {
                 FileName = RedMPath,
-                Arguments = $"-pure_1 +connect {directConnectAddress}",
+                Arguments = $"-pure_1 +connect {directConnectTarget}",
                 UseShellExecute = true
             });
             StatusMessage = "RedM wird gestartet...";
